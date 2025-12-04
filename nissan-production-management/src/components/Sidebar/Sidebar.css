@@ -1,0 +1,173 @@
+.sidebar {
+  width: 250px;
+  background-color: #1a1a1a;
+  color: white;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+}
+
+.sidebar-header {
+  padding: 25px 20px;
+  border-bottom: 1px solid #333;
+}
+
+.logo h2 {
+  color: #c3002f;
+  font-size: 1.8em;
+  margin-bottom: 5px;
+}
+
+.logo-subtitle {
+  color: #aaa;
+  font-size: 0.8em;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  margin-top: 20px;
+  padding: 10px;
+  background-color: #333;
+  border-radius: 6px;
+}
+
+.user-avatar {
+  width: 40px;
+  height: 40px;
+  background-color: #c3002f;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 1.2em;
+  margin-right: 12px;
+}
+
+.user-details {
+  flex: 1;
+}
+
+.user-name {
+  font-weight: 500;
+  margin-bottom: 2px;
+}
+
+.user-role {
+  font-size: 0.8em;
+  color: #aaa;
+  text-transform: capitalize;
+}
+
+.sidebar-nav {
+  flex: 1;
+  padding: 20px 0;
+  overflow-y: auto;
+}
+
+.nav-section {
+  margin-bottom: 25px;
+}
+
+.section-title {
+  font-size: 0.8em;
+  color: #666;
+  text-transform: uppercase;
+  padding: 0 20px;
+  margin-bottom: 10px;
+  letter-spacing: 1px;
+}
+
+.nav-link {
+  display: flex;
+  align-items: center;
+  padding: 12px 20px;
+  color: #aaa;
+  text-decoration: none;
+  transition: all 0.3s;
+  border-left: 4px solid transparent;
+}
+
+.nav-link:hover {
+  background-color: #333;
+  color: white;
+}
+
+.nav-link.active {
+  background-color: #333;
+  color: white;
+  border-left-color: #c3002f;
+}
+
+.nav-icon {
+  font-size: 1.2em;
+  margin-right: 12px;
+  width: 24px;
+  text-align: center;
+}
+
+.nav-text {
+  font-size: 0.95em;
+}
+
+.logout-btn {
+  width: 100%;
+  background: none;
+  border: none;
+  text-align: left;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.sidebar-footer {
+  padding: 20px;
+  border-top: 1px solid #333;
+  background-color: #222;
+}
+
+.shift-info {
+  margin-bottom: 15px;
+}
+
+.shift-label {
+  font-size: 0.8em;
+  color: #666;
+  margin-bottom: 3px;
+}
+
+.shift-value {
+  font-size: 0.9em;
+  color: #aaa;
+  font-weight: 500;
+}
+
+.system-status {
+  display: flex;
+  align-items: center;
+  font-size: 0.9em;
+  color: #aaa;
+}
+
+.system-status .status-indicator {
+  margin-right: 8px;
+}
+
+/* Scrollbar personalizado */
+.sidebar-nav::-webkit-scrollbar {
+  width: 6px;
+}
+
+.sidebar-nav::-webkit-scrollbar-track {
+  background: #222;
+}
+
+.sidebar-nav::-webkit-scrollbar-thumb {
+  background: #444;
+  border-radius: 3px;
+}
+
+.sidebar-nav::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}

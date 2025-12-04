@@ -1,0 +1,125 @@
+/* src/components/Login/Login.css */
+.login-container {
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+  padding: 40px;
+  width: 400px;
+  text-align: center;
+}
+
+.login-header {
+  margin-bottom: 30px;
+}
+
+.login-header h1 {
+  color: #c3002f;
+  font-size: 2.5em;
+  margin-bottom: 10px;
+  font-weight: bold;
+}
+
+.login-header h2 {
+  color: #333;
+  font-weight: normal;
+  font-size: 1.5em;
+  margin-bottom: 5px;
+}
+
+.login-subtitle {
+  color: #666;
+  font-size: 0.9em;
+  margin-top: 0;
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.error-message {
+  background-color: #ffe6e6;
+  color: #c3002f;
+  padding: 12px;
+  border-radius: 5px;
+  font-size: 14px;
+  border-left: 4px solid #c3002f;
+}
+
+.login-button {
+  width: 100%;
+  padding: 14px;
+  font-size: 16px;
+  margin-top: 10px;
+  position: relative;
+}
+
+.login-button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.spinner {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  border-top-color: white;
+  animation: spin 1s linear infinite;
+  margin-right: 8px;
+  vertical-align: middle;
+}
+
+.login-links {
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid #eee;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.link-button {
+  background: none;
+  border: none;
+  color: #c3002f;
+  cursor: pointer;
+  font-size: 14px;
+  padding: 0;
+  text-decoration: underline;
+}
+
+.link-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.link-button:hover:not(:disabled) {
+  text-decoration: none;
+}
+
+.register-prompt {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.register-prompt span {
+  color: #666;
+  font-size: 14px;
+}
+
+.demo-info {
+  margin-top: 25px;
+  padding-top: 20px;
+  border-top: 1px solid #eee;
+  font-size: 12px;
+  color: #999;
+}
+
+.demo-info p {
+  margin: 5px 0;
+}
