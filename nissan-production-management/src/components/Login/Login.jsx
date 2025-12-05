@@ -1,5 +1,4 @@
-// src/components/Login/Login.jsx
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import './Login.css';
@@ -12,10 +11,11 @@ const Login = () => {
   const navigate = useNavigate();
   const { login } = useAuth();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
     
+    // Validaciones
     if (!email || !password) {
       setError('Por favor completa todos los campos');
       return;
@@ -29,22 +29,25 @@ const Login = () => {
 
     setIsLoading(true);
     
-    // Simular petición al servidor
-    setTimeout(() => {
+    try {
+      const userData = await login(email, password);
+      
+      // Redirigir según el tipo de usuario
+      if (userData.type === 'maintenance') {
+        navigate('/maintenance');
+      } else if (userData.type === 'finance') {
+        navigate('/finance');
+      } else {
+        navigate('/dashboard');
+      }
+    } catch (err) {
+      setError(err.message || 'Error al iniciar sesión');
       setIsLoading(false);
-      
-      // Simular diferentes tipos de usuario según el email
-      let userType = 'supervisor';
-      if (email.includes('mantenimiento')) userType = 'maintenance';
-      if (email.includes('finanzas')) userType = 'finance';
-      
-      login(email, userType);
-      navigate('/control-room');
-    }, 1000);
+    }
   };
 
   const handleForgotPassword = () => {
-    alert('Se enviarán instrucciones para recuperar tu contraseña');
+    alert('Para recuperar tu contraseña contacta al administrador del sistema');
   };
 
   const handleRegister = () => {
@@ -52,91 +55,90 @@ const Login = () => {
   };
 
   return (
-    <div className="login-container">
-      <div className="login-header">
-        <h1>NISSAN</h1>
-        <h2>BIENVENIDO</h2>
-        <p className="login-subtitle">Sistema de Gestión de Producción</p>
-      </div>
+    <div className="login-page">
+      <div className="login-container">
+        <div className="login-header">
+          <h1>NISSAN</h1>
+          <h2>BIENVENIDO</h2>
+          <p className="login-subtitle">Sistema de Gestión de Producción</p>
+        </div>
 
-      <form onSubmit={handleSubmit} className="login-form">
         {error && (
           <div className="error-message">
             ⚠️ {error}
           </div>
         )}
 
-        <div className="form-group">
-          <label>Ingresa tu dirección e-mail</label>
-          <input
-            type="email"
-            value={email}
-            onChange={(e) => {
-              setEmail(e.target.value);
-              setError('');
-            }}
-            placeholder="usuario@nissan.com"
-            required
-            disabled={isLoading}
-          />
-        </div>
+        <form onSubmit={handleSubmit} className="login-form">
+          <div className="form-group">
+            <label>Ingresa tu dirección e-mail</label>
+            <input
+              type="email"
+              value={email}
+              onChange={(e) => {
+                setEmail(e.target.value);
+                setError('');
+              }}
+              placeholder="ejemplo@nissan.com"
+              required
+              disabled={isLoading}
+            />
+          </div>
 
-        <div className="form-group">
-          <label>Contraseña</label>
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => {
-              setPassword(e.target.value);
-              setError('');
-            }}
-            placeholder="Ingresa tu contraseña"
-            required
-            disabled={isLoading}
-          />
-        </div>
+          <div className="form-group">
+            <label>Contraseña</label>
+            <input
+              type="password"
+              value={password}
+              onChange={(e) => {
+                setPassword(e.target.value);
+                setError('');
+              }}
+              placeholder="Ingresa tu contraseña"
+              required
+              disabled={isLoading}
+            />
+          </div>
 
-        <button 
-          type="submit" 
-          className="btn-nissan login-button"
-          disabled={isLoading}
-        >
-          {isLoading ? (
-            <>
-              <span className="spinner"></span>
-              Iniciando sesión...
-            </>
-          ) : 'Iniciar sesión'}
-        </button>
-
-        <div className="login-links">
           <button 
-            type="button" 
-            className="link-button"
-            onClick={handleForgotPassword}
+            type="submit" 
+            className="btn-nissan login-button"
             disabled={isLoading}
           >
-            ¿Olvidaste tu contraseña?
+            {isLoading ? (
+              <>
+                <span className="spinner"></span>
+                Iniciando sesión...
+              </>
+            ) : 'Iniciar sesión'}
           </button>
-          
-          <div className="register-prompt">
-            <span>¿No tienes una cuenta?</span>
+
+          <div className="login-actions">
             <button 
               type="button" 
               className="link-button"
-              onClick={handleRegister}
+              onClick={handleForgotPassword}
               disabled={isLoading}
             >
-              Crear una cuenta
+              ¿Olvidaste tu contraseña?
             </button>
           </div>
-        </div>
 
-        <div className="demo-info">
-          <p>Para demo, usa cualquier correo con dominio @nissan.com</p>
-          <p>Ejemplo: supervisor@nissan.com</p>
-        </div>
-      </form>
+          <div className="login-footer">
+            <p>
+              ¿No tienes una cuenta?{' '}
+              <button 
+                type="button" 
+                className="register-link"
+                onClick={handleRegister}
+                disabled={isLoading}
+              >
+                Crear una cuenta
+              </button>
+            </p>
+          </div>
+        </form>
+      </div>
     </div>
   );
 };

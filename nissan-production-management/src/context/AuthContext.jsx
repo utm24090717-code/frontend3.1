@@ -4,47 +4,118 @@ const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
 
+  // Inicializar localStorage con usuarios vacíos si no existe
   useEffect(() => {
-    // Cargar usuario desde localStorage
-    const storedUser = localStorage.getItem('nissan_user');
-    if (storedUser) {
-      try {
-        setUser(JSON.parse(storedUser));
-      } catch (error) {
-        console.error('Error parsing user data:', error);
-        localStorage.removeItem('nissan_user');
-      }
+    if (!localStorage.getItem('nissan_users')) {
+      localStorage.setItem('nissan_users', JSON.stringify([]));
     }
-    setLoading(false);
+    
+    // Verificar si hay usuario logueado
+    const storedUser = localStorage.getItem('nissan_current_user');
+    if (storedUser) {
+      setUser(JSON.parse(storedUser));
+    }
   }, []);
 
-  const login = (email, userType) => {
-    const userData = {
-      email,
-      type: userType,
-      name: email.split('@')[0].replace('.', ' '),
-      timestamp: new Date().toISOString()
-    };
-    setUser(userData);
-    localStorage.setItem('nissan_user', JSON.stringify(userData));
+  // Obtener todos los usuarios
+  const getUsers = () => {
+    const users = localStorage.getItem('nissan_users');
+    return users ? JSON.parse(users) : [];
   };
 
-  const register = (email, userType) => {
-    const userData = {
-      email,
-      type: userType,
-      name: email.split('@')[0].replace('.', ' '),
-      timestamp: new Date().toISOString()
-    };
-    setUser(userData);
-    localStorage.setItem('nissan_user', JSON.stringify(userData));
+  // Guardar usuarios
+  const saveUsers = (users) => {
+    localStorage.setItem('nissan_users', JSON.stringify(users));
+  };
+
+  // Login: verifica contra usuarios registrados
+  const login = async (email, password) => {
+    return new Promise((resolve, reject) => {
+      setLoading(true);
+      
+      setTimeout(() => {
+        const users = getUsers();
+        const userFound = users.find(u => 
+          u.email.toLowerCase() === email.toLowerCase() && 
+          u.password === password
+        );
+
+        if (userFound) {
+          // Crear objeto de usuario sin contraseña para la sesión
+          const userSession = {
+            id: userFound.id,
+            email: userFound.email,
+            type: userFound.type,
+            name: userFound.name,
+            createdAt: userFound.createdAt
+          };
+          
+          setUser(userSession);
+          localStorage.setItem('nissan_current_user', JSON.stringify(userSession));
+          setLoading(false);
+          resolve(userSession);
+        } else {
+          setLoading(false);
+          reject(new Error('Credenciales incorrectas o usuario no registrado'));
+        }
+      }, 1000);
+    });
+  };
+
+  // Registrar nuevo usuario
+  const register = async (email, password, userType) => {
+    return new Promise((resolve, reject) => {
+      setLoading(true);
+      
+      setTimeout(() => {
+        try {
+          const users = getUsers();
+          
+          // Verificar si el email ya existe
+          const emailExists = users.some(u => u.email.toLowerCase() === email.toLowerCase());
+          if (emailExists) {
+            throw new Error('Este correo ya está registrado');
+          }
+
+          const newUser = {
+            id: Date.now().toString(),
+            email: email.toLowerCase(),
+            password,
+            type: userType,
+            name: email.split('@')[0].replace('.', ' '),
+            createdAt: new Date().toISOString()
+          };
+          
+          // Guardar en lista de usuarios
+          users.push(newUser);
+          saveUsers(users);
+          
+          // Iniciar sesión automáticamente
+          const userSession = {
+            id: newUser.id,
+            email: newUser.email,
+            type: newUser.type,
+            name: newUser.name,
+            createdAt: newUser.createdAt
+          };
+          
+          setUser(userSession);
+          localStorage.setItem('nissan_current_user', JSON.stringify(userSession));
+          setLoading(false);
+          resolve(userSession);
+        } catch (error) {
+          setLoading(false);
+          reject(error);
+        }
+      }, 1000);
+    });
   };
 
   const logout = () => {
     setUser(null);
-    localStorage.removeItem('nissan_user');
+    localStorage.removeItem('nissan_current_user');
   };
 
   return (

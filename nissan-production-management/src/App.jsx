@@ -1,4 +1,4 @@
-// src/App.jsx
+import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import Login from './components/Login/Login';
@@ -41,20 +41,17 @@ const MainLayout = ({ children }) => {
   );
 };
 
-// Componente de redirección basado en tipo de usuario
-const DashboardRedirect = () => {
+// Redirección basada en tipo de usuario
+const UserRedirect = () => {
   const { user } = useAuth();
   
-  if (!user) {
-    return <Navigate to="/" />;
-  }
+  if (!user) return <Navigate to="/" />;
   
-  switch (user.type) {
+  switch(user.type) {
     case 'maintenance':
       return <Navigate to="/maintenance" />;
     case 'finance':
       return <Navigate to="/finance" />;
-    case 'supervisor':
     default:
       return <Navigate to="/dashboard" />;
   }
@@ -66,9 +63,12 @@ function App() {
       <Router>
         <Routes>
           {/* Rutas públicas */}
-          <Route path="/" element={<div className="login-page"><Login /></div>} />
+          <Route path="/" element={<Login />} />
           <Route path="/login" element={<Navigate to="/" />} />
-          <Route path="/register" element={<div className="register-page"><Register /></div>} />
+          <Route path="/register" element={<Register />} />
+          
+          {/* Redirección del usuario */}
+          <Route path="/redirect" element={<UserRedirect />} />
           
           {/* Rutas protegidas */}
           <Route path="/control-room" element={
@@ -103,10 +103,7 @@ function App() {
             </ProtectedRoute>
           } />
           
-          {/* Redirección por defecto */}
-          <Route path="/redirect" element={<DashboardRedirect />} />
-          
-          {/* Ruta 404 */}
+          {/* Ruta por defecto */}
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>
       </Router>
